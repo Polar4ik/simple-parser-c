@@ -88,6 +88,23 @@ ASTNode *parse_exp() {
     return NULL;
 }
 
+int eval(ASTNode *node) {
+    if (node->type == TOKEN_NUMBER) {
+        return node->value;
+    }
+
+    int left_value = eval(node->left);
+    int right_value = eval (node->right);
+
+    if (node->type == TOKEN_PLUS) {
+        return left_value + right_value;
+    } else if (node->type == TOKEN_MINUS) {
+        return left_value - right_value;
+    }
+
+    return 0;
+}
+
 int main() {
     input = "2+2";
     ASTNode *ast = parse_exp();
