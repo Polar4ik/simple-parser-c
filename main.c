@@ -11,8 +11,15 @@ typedef enum {
 
 typedef struct {
     TokenType type;
-    int value;  // используется только для чисел
+    int value;  // use only for number
 } Token;
+
+typedef struct ASTNode {
+    TokenType type;
+    int value;
+    struct ASTNode *left;
+    struct ASTNode *right;
+} ASTNode;
 
 char *input;
 int pos = 0;
@@ -25,7 +32,7 @@ Token get_next_token() {
 
     if (isdigit(input[pos])) {
         token.type = TOKEN_NUMBER;
-        token.value = input[pos] - '0'; // в число
+        token.value = input[pos] - '0'; // to number
         pos++;
         printf("NUM TOKEN, Token value: %d \n", token.value);
         return token;
