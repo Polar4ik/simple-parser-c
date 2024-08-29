@@ -27,7 +27,7 @@ int pos = 0;
 Token get_next_token() {
     Token token;
 
-    // пропускаем пробелы
+    // pass whitespace
     while (isspace(input[pos])) pos++;
 
     if (isdigit(input[pos])) {
@@ -54,6 +54,15 @@ Token get_next_token() {
 
     token.type = TOKEN_EOF;
     return token;
+}
+
+ASTNode *new_ast_node(TokenType token, int value) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    node->type = type;
+    node->value = value;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
 }
 
 int main() {
