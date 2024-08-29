@@ -58,7 +58,7 @@ Token get_next_token() {
 
 ASTNode *new_ast_node(TokenType token, int value) {
     ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
-    node->type = type;
+    node->type = token;
     node->value = value;
     node->left = NULL;
     node->right = NULL;
@@ -79,7 +79,7 @@ ASTNode *parse_exp() {
             op_node->right = new_ast_node(TOKEN_NUMBER, get_next_token().value);
             
             node = op_node;
-            token = get_next_token;
+            token = get_next_token();
         }
 
         return node;
@@ -90,11 +90,7 @@ ASTNode *parse_exp() {
 
 int main() {
     input = "2+2";
-    
-    get_next_token();
-    get_next_token();
-    get_next_token();
-    get_next_token();
+    ASTNode *ast = parse_exp();
 
     return 0;
 }
