@@ -25,23 +25,23 @@ Token get_next_token() {
 
     if (isdigit(input[pos])) {
         token.type = TOKEN_NUMBER;
-        token.value = input[pos] - 0; // в число
+        token.value = input[pos] - '0'; // в число
         pos++;
-        printf("\nNUM TOKEN, Token value: %d", token.value);
+        printf("NUM TOKEN, Token value: %d \n", token.value);
         return token;
     }
 
     if (input[pos] == '+') {
         token.type = TOKEN_PLUS;
         pos++;
-        printf("\nPLUS TOKEN");
+        printf("PLUS TOKEN\n");
         return token;
     }
 
     if (input[pos] == '-') {
         token.type = TOKEN_MINUS;
         pos++;
-        printf("\nMINUS TOKEN");
+        printf("MINUS TOKEN\n");
         return token;
     }
 
@@ -49,10 +49,13 @@ Token get_next_token() {
     return token;
 }
 
-
-
-
 int main() {
     input = "2+2";
+    
+    get_next_token();
+    get_next_token();
+    get_next_token();
+    get_next_token();
+
     return 0;
 }
