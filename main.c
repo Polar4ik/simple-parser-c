@@ -7,6 +7,8 @@ typedef enum {
     TOKEN_NUMBER,
     TOKEN_PLUS,
     TOKEN_MINUS,
+    TOKEN_STAR,
+    TOKEN_SLASH,
     TOKEN_EOF,
 } TokenType;
 
@@ -46,7 +48,6 @@ Token get_next_token() {
             pos++;
         }
         
-        
         token.value = atoi(raw); // to number
         printf("NUM TOKEN, Token value: %d \n", token.value);
         
@@ -66,6 +67,20 @@ Token get_next_token() {
         token.type = TOKEN_MINUS;
         pos++;
         printf("MINUS TOKEN\n");
+        return token;
+    }
+
+    if (input[pos] == '*') {
+        token.type = TOKEN_STAR;
+        pos++;
+        printf("STAR TOKEN\n");
+        return token;
+    }
+
+    if (input[pos] == '/') {
+        token.type = TOKEN_SLASH;
+        pos++;
+        printf("SLASH TOKEN\n");
         return token;
     }
 
@@ -99,6 +114,18 @@ ASTNode *parse_exp() {
             token = get_next_token();
         }
 
+        while (token.type == TOKEN_STAR || token.type == TOKEN_SLASH)
+        {
+            ASTNode *op_node = new_ast_node(token.type, 0);
+
+            op_node->left = node->right;
+            op_node->right = new_ast_node(TOKEN_NUMBER, get_next_token().value);
+
+            node->right = op_node;
+            token = get_next_token();
+        }
+        
+
         return node;
     }
 
@@ -118,12 +145,18 @@ int eval(ASTNode *node) {
     } else if (node->type == TOKEN_MINUS) {
         return left_value - right_value;
     }
+    else if (node->type == TOKEN_STAR) {
+        return left_value * right_value;
+    }
+    else if (node->type == TOKEN_SLASH) {
+        return left_value / right_value;
+    }
 
     return 0;
 }
 
 int main() {
-    input = "99999+1";
+    input = "2+2*2";
     ASTNode *ast = parse_exp();
 
     int res = eval(ast);
