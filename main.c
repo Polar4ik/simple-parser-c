@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef enum {
     TOKEN_NUMBER,
@@ -32,9 +33,25 @@ Token get_next_token() {
 
     if (isdigit(input[pos])) {
         token.type = TOKEN_NUMBER;
-        token.value = atoi(&input[pos]); // to number
+        char *raw = (char *)malloc(sizeof(char));
+        raw[0] = input[pos];
         pos++;
+
+        int len = 0;
+        while (isdigit(input[pos]))
+        {
+            len++;
+            raw = realloc(raw, len);
+            raw[len] = input[pos];
+            pos++;
+        }
+        
+        
+        token.value = atoi(raw); // to number
         printf("NUM TOKEN, Token value: %d \n", token.value);
+        
+        free(raw);
+
         return token;
     }
 
@@ -106,7 +123,7 @@ int eval(ASTNode *node) {
 }
 
 int main() {
-    input = "2+2+5";
+    input = "99999+1";
     ASTNode *ast = parse_exp();
 
     int res = eval(ast);
