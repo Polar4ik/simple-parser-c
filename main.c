@@ -32,7 +32,7 @@ Token get_next_token() {
 
     if (isdigit(input[pos])) {
         token.type = TOKEN_NUMBER;
-        token.value = input[pos] - '0'; // to number
+        token.value = atoi(&input[pos]); // to number
         pos++;
         printf("NUM TOKEN, Token value: %d \n", token.value);
         return token;
@@ -69,7 +69,7 @@ ASTNode *parse_exp() {
     Token token = get_next_token();
 
     if (token.type == TOKEN_NUMBER) {
-        ASTNode *node = new_ast_node(TOKEN_NUMBER, token.type);
+        ASTNode *node = new_ast_node(TOKEN_NUMBER, token.value);
         token = get_next_token();
 
         while (token.type == TOKEN_PLUS || token.type == TOKEN_MINUS) {
@@ -106,8 +106,11 @@ int eval(ASTNode *node) {
 }
 
 int main() {
-    input = "2+2";
+    input = "2+2+5";
     ASTNode *ast = parse_exp();
+
+    int res = eval(ast);
+    printf("RES: %d", res);
 
     return 0;
 }
