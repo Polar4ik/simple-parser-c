@@ -2,13 +2,16 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef enum {
     TOKEN_NUMBER,
+    
     TOKEN_PLUS,
     TOKEN_MINUS,
     TOKEN_STAR,
     TOKEN_SLASH,
+
     TOKEN_EOF,
 } TokenType;
 
@@ -104,17 +107,7 @@ ASTNode *parse_exp() {
         ASTNode *node = new_ast_node(TOKEN_NUMBER, token.value);
         token = get_next_token();
 
-        while (token.type == TOKEN_PLUS || token.type == TOKEN_MINUS) {
-            ASTNode *op_node = new_ast_node(token.type, 0);
-
-            op_node->left = node;
-            op_node->right = new_ast_node(TOKEN_NUMBER, get_next_token().value);
-            
-            node = op_node;
-            token = get_next_token();
-        }
-
-        while (token.type == TOKEN_STAR || token.type == TOKEN_SLASH)
+        if (token.type == TOKEN_STAR || token.type == TOKEN_SLASH)
         {
             ASTNode *op_node = new_ast_node(token.type, 0);
 
@@ -124,7 +117,16 @@ ASTNode *parse_exp() {
             node->right = op_node;
             token = get_next_token();
         }
-        
+
+        if (token.type == TOKEN_PLUS || token.type == TOKEN_MINUS) {
+            ASTNode *op_node = new_ast_node(token.type, 0);
+
+            op_node->left = node;
+            op_node->right = new_ast_node(TOKEN_NUMBER, get_next_token().value);
+            
+            node = op_node;
+            token = get_next_token();
+        }
 
         return node;
     }
