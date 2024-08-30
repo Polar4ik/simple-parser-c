@@ -38,19 +38,17 @@ Token get_next_token() {
 
     if (isdigit(input[pos])) {
         token.type = TOKEN_NUMBER;
-        char *raw = (char *)malloc(sizeof(char));
-        raw[0] = input[pos];
-        pos++;
+       
+	char *start = &input[pos];
 
-        int len = 0;
-        while (isdigit(input[pos]))
-        {
-            len++;
-            raw = realloc(raw, len);
-            raw[len] = input[pos];
-            pos++;
-        }
-        
+	while (isdigit(input[pos])) pos++;
+	
+	int len = &input[pos] - start;
+	char *raw = (char *)malloc(len + 1);
+
+	strncpy(raw, start, len);
+	raw[len] = '\0';
+	
         token.value = atoi(raw); // to number
         printf("NUM TOKEN, Token value: %d \n", token.value);
         
